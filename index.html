@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Träningslogg</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f3f4f6;
+    }
+    h1 {
+      color: #111827;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      text-align: left;
+    }
+    input, select {
+      padding: 0.5rem;
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 Träningslogg</h1>
+  <form id="logForm">
+    <label>Datum: <input type="date" id="date" required /></label>
+    <label>Övning:
+      <select id="exercise">
+        <option value="Bänkpress">Bänkpress</option>
+        <option value="Knäböj">Knäböj</option>
+        <option value="Marklyft">Marklyft</option>
+        <option value="Militärpress">Militärpress</option>
+        <option value="Egen">Egen övning</option>
+      </select>
+    </label>
+    <input type="text" id="customExercise" placeholder="Skriv egen övning" style="display:none;" />
+    <label>Reps: <input type="number" id="reps" required /></label>
+    <label>Vikt (kg): <input type="number" id="weight" required /></label>
+    <button type="submit">Lägg till</button>
+  </form>
+  <table id="logTable">
+    <thead>
+      <tr><th>Datum</th><th>Övning</th><th>Reps</th><th>Vikt (kg)</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    const form = document.getElementById('logForm');
+    const tableBody = document.querySelector('#logTable tbody');
+    const exerciseSelect = document.getElementById('exercise');
+    const customInput = document.getElementById('customExercise');
+
+    exerciseSelect.addEventListener('change', () => {
+      customInput.style.display = exerciseSelect.value === 'Egen' ? 'inline' : 'none';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const date = document.getElementById('date').value;
+      let exercise = exerciseSelect.value;
+      if (exercise === 'Egen') {
+        exercise = customInput.value || 'Egen övning';
+      }
+      const reps = document.getElementById('reps').value;
+      const weight = document.getElementById('weight').value;
+
+      const row = `<tr><td>${date}</td><td>${exercise}</td><td>${reps}</td><td>${weight}</td></tr>`;
+      tableBody.innerHTML += row;
+
+      form.reset();
+      customInput.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
